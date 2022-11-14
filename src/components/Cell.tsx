@@ -11,8 +11,10 @@ export function Cell({ value = 0, position = [0, 0], debug = false, onInput }) {
 
   return (
     <div
-      className={`relative flex h-12 w-12 items-center justify-center text-neutral-200 ${
-        isCustomInput ? 'bg-emerald-900' : 'bg-neutral-900'
+      className={`relative flex h-12 w-12 items-center justify-center bg-neutral-900 ${
+        isCustomInput
+          ? 'font-bold text-emerald-500 shadow-inner-center shadow-emerald-900'
+          : 'text-neutral-200'
       }`}
     >
       <input
