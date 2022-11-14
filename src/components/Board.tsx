@@ -20,11 +20,16 @@ export function Board() {
   const [debug, setDebug] = useState(true);
 
   const solution = useSolution({
-    onSuccess: (response) => {
-      if (debug) console.log(response);
-      setState(response.solution);
-    },
+    onSuccess: (response) => setState(response.solution),
   });
+
+  const onInput = ([x, y]: [number, number], input: string) => {
+    const parsedInput = input.length ? +input.at(-1) : 0;
+    setState((_state) => {
+      _state[x][y] = parsedInput ?? 0;
+      return [..._state];
+    });
+  };
 
   return (
     <>
@@ -36,6 +41,7 @@ export function Board() {
               position={[rowIndex, cellIndex]}
               value={cell}
               debug={debug}
+              onInput={onInput}
             />
           )),
         )}
@@ -54,12 +60,16 @@ export function Board() {
   );
 }
 
-function Cell({ value, position, debug }) {
+function Cell({ value = 0, position = [0, 0], debug = false, onInput }) {
   return (
     <div className="relative flex h-12 w-12 items-center justify-center bg-neutral-900 text-neutral-200">
-      {value}
+      <input
+        className="h-12 w-12 bg-transparent text-center"
+        value={value || ''}
+        onChange={(e) => onInput(position, e.target.value)}
+      />
       {debug && (
-        <small className="absolute bottom-0 right-0 font-mono text-xs text-neutral-500">
+        <small className="absolute bottom-0 right-0 font-mono text-xs leading-none text-neutral-600">
           {position}
         </small>
       )}
