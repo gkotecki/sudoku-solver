@@ -1,22 +1,30 @@
 import { useState } from 'react';
+import { useSolution } from '../hooks/solution';
 import { Button } from './Button';
 import { Checkbox } from './Checkbox';
 
 const initialBoard = [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
   [1, 2, 3, 4, 5, 6, 7, 8, 9],
-  [2, 2, 3, 4, 5, 6, 7, 8, 9],
-  [3, 2, 3, 4, 5, 6, 7, 8, 9],
-  [4, 2, 3, 4, 5, 6, 7, 8, 9],
-  [5, 2, 3, 4, 5, 6, 7, 8, 9],
-  [6, 2, 3, 4, 5, 6, 7, 8, 9],
-  [7, 2, 3, 4, 5, 6, 7, 8, 9],
-  [8, 2, 3, 4, 5, 6, 7, 8, 9],
-  [9, 2, 3, 4, 5, 6, 7, 8, 9],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
 export function Board() {
   const [state, setState] = useState(initialBoard);
   const [debug, setDebug] = useState(true);
+
+  const solution = useSolution({
+    onSuccess: (response) => {
+      if (debug) console.log(response);
+      setState(response.solution);
+    },
+  });
 
   return (
     <>
@@ -35,10 +43,13 @@ export function Board() {
 
       <div className="flex gap-8">
         <Checkbox label="Debug" checked={debug} onChange={setDebug} />
+        <Button onClick={() => solution.get(state)}>Solve</Button>
         <Button
-          onClick={() => console.warn('TODO: implement from https://github.com/bertoort/sugoku')}
+          onClick={() => {
+            throw new Error('TODO: implement reset');
+          }}
         >
-          Solve
+          Reset
         </Button>
       </div>
     </>

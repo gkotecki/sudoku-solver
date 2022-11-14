@@ -5,7 +5,10 @@ export function Button({
 }) {
   return (
     <button
-      className={'rounded-lg bg-emerald-500 py-1 px-3 transition hover:brightness-90 ' + className}
+      className={
+        'rounded-lg bg-emerald-800 py-1 px-3 text-neutral-50 transition hover:brightness-90 ' +
+        className
+      }
       onClick={onClick}
     >
       {children}
