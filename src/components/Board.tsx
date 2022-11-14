@@ -43,12 +43,10 @@ export function Board() {
 
       <div className="flex gap-8">
         <Checkbox label="Debug" checked={debug} onChange={setDebug} />
-        <Button onClick={() => solution.get(state)}>Solve</Button>
-        <Button
-          onClick={() => {
-            throw new Error('TODO: implement reset');
-          }}
-        >
+        <Button onClick={() => solution.get(state)} loading={solution.loading}>
+          Solve
+        </Button>
+        <Button onClick={() => setState(initialBoard)}>
           Reset
         </Button>
       </div>
