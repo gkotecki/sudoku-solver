@@ -1,7 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
-import { forbidden, possible } from '../shared/sudoku';
 
-export function Cell({ value = 0, position = [0, 0], debug = false, onInput }) {
+export function Cell({
+  value = 0,
+  position = [0, 0],
+  debug = false,
+  onInput,
+  pOptions = { possible: [], forbidden: [] },
+}) {
   const [isCustomInput, setIsCustomInput] = useState(false);
 
   useEffect(() => {
@@ -10,17 +15,11 @@ export function Cell({ value = 0, position = [0, 0], debug = false, onInput }) {
     }
   }, [value]);
 
-  const options = useMemo(() => {
-    const [x, y] = position;
-    return {
-      possible: possible.get(`${x}${y}`),
-      forbidden: forbidden.get(`${x}${y}`),
-    };
-  }, [position, possible, forbidden]);
-
   return (
     <div
-      className={`relative flex h-12 w-12 items-center justify-center bg-neutral-900 ${
+      className={`relative flex h-12 w-12 items-center justify-center ${
+        !value && !pOptions.possible.length ? 'bg-[#231111]' : 'bg-neutral-900'
+      } ${
         isCustomInput
           ? 'font-bold text-emerald-500 shadow-inner-center shadow-emerald-900'
           : 'text-neutral-200'
@@ -36,13 +35,13 @@ export function Cell({ value = 0, position = [0, 0], debug = false, onInput }) {
       />
       {debug && (
         <>
-          <small className="pointer-events-none absolute top-[1px] left-[1px] font-mono text-xs leading-none text-blue-700">
-            {options.possible}
+          <small className="pointer-events-none absolute top-[1px] left-[1px] font-mono text-[10px] leading-none text-blue-700">
+            {pOptions.possible}
           </small>
-          <small className="pointer-events-none absolute top-3 left-[1px] font-mono text-xs leading-none text-red-800">
-            {options.forbidden}
+          <small className="pointer-events-none absolute top-3 left-[1px] font-mono text-[10px] leading-none text-red-800">
+            {pOptions.forbidden}
           </small>
-          <small className="pointer-events-none absolute bottom-[1px] right-[1px] font-mono text-xs leading-none text-neutral-600">
+          <small className="pointer-events-none absolute bottom-[1px] right-[1px] font-mono text-[10px] leading-none text-neutral-600">
             {position}
           </small>
         </>

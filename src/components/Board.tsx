@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSolution } from '../hooks/solution';
-import { checkPossibilities } from '../shared/sudoku';
+import { checkPossibilities, possibilities } from '../shared/sudoku';
 import { Button } from './Button';
 import { Cell } from './Cell';
 import { Checkbox } from './Checkbox';
@@ -26,8 +26,13 @@ export function Board() {
     onSuccess: (response) => setState(response.solution),
   });
 
+  const [psb, setPsb] = useState(possibilities);
   useEffect(() => {
-    checkPossibilities(state)
+    console.log('state change detected')
+    checkPossibilities(state).then(() => {
+      console.log('\tBoard got new state event')
+      setPsb(possibilities);
+    })
   }, [state]);
 
   const onInput = ([x, y]: [number, number], input: string) => {
@@ -49,6 +54,7 @@ export function Board() {
               value={cell}
               debug={debug}
               onInput={onInput}
+              pOptions={psb[`${rowIndex}${cellIndex}`]}
             />
           )),
         )}

@@ -1,29 +1,31 @@
 import { getClone } from './utils';
 
-export let forbidden: Map<string, number[]> = new Map([]);
-export let possible: Map<string, number[]> = new Map([]);
+export let possibilities: Record<string, { forbidden: number[], possible: number[] }> = {};
 
 export async function checkPossibilities(board: number[][]) {
   console.time('checkPossibilities');
-  forbidden = new Map([]);
-  possible = new Map([]);
-  let newBoard = getClone(board);
+  const _possibilities = {};
+  const newBoard = getClone(board);
   for (let x = 0; x < newBoard.length; x++) {
     const row = newBoard[x];
     for (let y = 0; y < row.length; y++) {
+      const pos = `${x}${y}`;
       const col = getCol(newBoard, [x, y]);
       const square = getSquare(newBoard, [x, y]);
       let cell = row[y];
       for (let i = 1; i <= 9; i++) {
         if (cell) break;
+        _possibilities[pos] = { ...(_possibilities[pos] ?? { forbidden: [], possible: [] })}
         if (row.includes(i) || col.includes(i) || square.includes(i)) {
-          forbidden.set(`${x}${y}`, [...(forbidden.get(`${x}${y}`) ?? []), i]);
+          _possibilities[pos].forbidden.push(i);
         } else {
-          possible.set(`${x}${y}`, [...(possible.get(`${x}${y}`) ?? []), i]);
+          _possibilities[pos].possible.push(i);
         }
       }
     }
   }
+  possibilities = _possibilities;
+  console.log('\tset', JSON.stringify(possibilities['00']))
   console.timeEnd('checkPossibilities');
 }
 
